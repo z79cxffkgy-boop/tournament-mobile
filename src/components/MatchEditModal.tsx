@@ -574,6 +574,13 @@ export default function MatchEditModal({
                   {showLiveScoring && !scoreSaved && (
                     <Text style={styles.saveScoreHint}>スコアを保存してから試合を終了してください</Text>
                   )}
+                  {/* 日程修正ボタン: ホストのみ表示 */}
+                  {isHost && onEditSchedule && !isFinished && (
+                    <TouchableOpacity style={styles.editScheduleBtn} onPress={onEditSchedule}>
+                      <Ionicons name="calendar-outline" size={16} color={Colors.primary} />
+                      <Text style={styles.editScheduleBtnText}>{t('match_modal.edit_schedule')}</Text>
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity style={styles.cancelBtn} onPress={handleCloseWithConfirm}>
                     <Text style={styles.cancelText}>{t('match_modal.close')}</Text>
                   </TouchableOpacity>
