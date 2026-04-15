@@ -288,12 +288,12 @@ export default function MatchEditModal({
   return (
     <Modal visible={visible} transparent animationType="slide">
       <KeyboardAvoidingView
-        style={styles.overlay}
+        style={[styles.overlay, isFullScreen && { justifyContent: 'flex-start' }]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* Backdrop: フルスクリーン時はタップ無効、通常時は閉じる確認 */}
+        {/* Backdrop: フルスクリーン時は非表示、通常時は閉じる確認 */}
         <TouchableWithoutFeedback onPress={isFullScreen ? undefined : handleCloseWithConfirm}>
-          <View style={styles.backdrop} />
+          <View style={[styles.backdrop, isFullScreen && { flex: 0 }]} />
         </TouchableWithoutFeedback>
         <Animated.View style={[styles.sheet, isFullScreen && styles.sheetFullScreen, { transform: [{ translateY }] }]}>
           {/* Swipeable handle */}
@@ -467,8 +467,8 @@ export default function MatchEditModal({
             ) : (showLiveScoring || showScoreCorrection) ? (
               /* ===== LIVE SCORING / SCORE CORRECTION ===== */
               <>
-                {/* LIVEバッジは実際にLIVE中のみ表示 */}
-                {showLiveScoring && isLive && (
+                {/* LIVEバッジ: LIVE中またはlocalLive（試合開始直後）に表示 */}
+                {showLiveScoring && (isLive || localLive) && (
                   <View style={styles.liveBadgeRow}>
                     <View style={styles.liveBadge}>
                       <View style={styles.liveDot} />
@@ -486,7 +486,7 @@ export default function MatchEditModal({
                 )}
                 <Text style={styles.title}>
                   {showLiveScoring
-                    ? (isLive ? t('match_modal.score_edit_mode') : t('match_modal.score_title'))
+                    ? ((isLive || localLive) ? t('match_modal.score_edit_mode') : t('match_modal.score_title'))
                     : (canEditFinishedScore ? t('match_modal.score_fix_mode') : t('match_modal.result_title'))}
                 </Text>
 
@@ -547,8 +547,8 @@ export default function MatchEditModal({
                 )}
 
                 <View style={styles.actions}>
-                  {/* スコア保存ボタン: LIVE中またはホストのFT修正時のみ表示 */}
-                  {((showLiveScoring && isLive) || canEditFinishedScore) && (
+                  {/* スコア保存ボタン: LIVE中・localLive（試合開始直後）またはホストのFT修正時のみ表示 */}
+                  {((showLiveScoring && (isLive || localLive)) || canEditFinishedScore) && (
                     <TouchableOpacity
                       style={styles.saveBtn}
                       onPress={handleSaveScore}
@@ -616,8 +616,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    maxHeight: '100%',
+    maxHeight: SCREEN_HEIGHT,
     paddingTop: 60,
+    paddingBottom: 40,
   },
   handleHitArea: {
     paddingTop: Spacing.md,
