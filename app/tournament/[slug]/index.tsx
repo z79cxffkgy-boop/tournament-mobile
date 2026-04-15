@@ -4379,7 +4379,7 @@ const styles = StyleSheet.create({
   refereeMatchStatus: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     marginBottom: 8,
-    paddingLeft: Spacing.md,
+    paddingLeft: Spacing.lg,
   },
   refereeStatusDot: {
     width: 8, height: 8, borderRadius: 4,
