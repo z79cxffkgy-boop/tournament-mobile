@@ -2987,7 +2987,7 @@ export default function TournamentDetailScreen() {
         </View>
         <View style={styles.refereeMatchTeams}>
           <Text style={styles.refereeMatchTeamName} numberOfLines={1}>{homeTeam || translateStageName(m.home_placeholder || '') || '---'}</Text>
-          <View style={[styles.refereeScoreBadge, isLive && { backgroundColor: '#fef2f2', borderColor: '#ef4444' }]}>
+          <View style={[styles.refereeScoreBadge, isLive && { borderColor: '#ef4444' }]}>
             <Text style={[styles.refereeScoreText, isLive && { color: '#ef4444' }]}>{fmtScore(m)}</Text>
           </View>
           <Text style={styles.refereeMatchTeamName} numberOfLines={1}>{awayTeam || translateStageName(m.away_placeholder || '') || '---'}</Text>
@@ -2996,7 +2996,10 @@ export default function TournamentDetailScreen() {
           <Text style={styles.refereeMatchTime}>{formatMatchDateTime(m.scheduled_at)}</Text>
         )}
         {m.venue && (
-          <Text style={styles.refereeMatchVenue}>📍 {m.venue}</Text>
+          <View style={styles.refereeMatchVenueRow}>
+            <Ionicons name="location-outline" size={12} color={Colors.textTertiary} />
+            <Text style={styles.refereeMatchVenue}>{m.venue}</Text>
+          </View>
         )}
       </TouchableOpacity>
     );
@@ -4376,6 +4379,7 @@ const styles = StyleSheet.create({
   refereeMatchStatus: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     marginBottom: 8,
+    paddingLeft: Spacing.xs,
   },
   refereeStatusDot: {
     width: 8, height: 8, borderRadius: 4,
@@ -4391,7 +4395,7 @@ const styles = StyleSheet.create({
   },
   refereeScoreBadge: {
     paddingHorizontal: 16, paddingVertical: 8,
-    borderRadius: 10, backgroundColor: Colors.surfaceSecondary,
+    borderRadius: 10, backgroundColor: 'transparent',
     borderWidth: 1, borderColor: Colors.border,
     minWidth: 72, alignItems: 'center',
   },
@@ -4401,7 +4405,10 @@ const styles = StyleSheet.create({
   refereeMatchTime: {
     fontSize: 12, color: Colors.textTertiary, textAlign: 'center', marginTop: 6,
   },
+  refereeMatchVenueRow: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 2,
+  },
   refereeMatchVenue: {
-    fontSize: 12, color: Colors.textTertiary, textAlign: 'center', marginTop: 2,
+    fontSize: 12, color: Colors.textTertiary,
   },
 });
